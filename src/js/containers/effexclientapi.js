@@ -3,9 +3,13 @@ import axios from 'axios';
 export default  (function (ns) {
     
     // the api base url
-    const ax = axios.create({
-        baseURL: 'https://ephex-auth.appspot-preview.com' //'http://v1.effexapi.org' //'https://nodestuff-xlibersion.c9users.io' //'http://v1.effexapi.org'
-    });
+    let ax; 
+    
+    ns.setBase = function (base) {
+        ax  = axios.create({
+            baseURL:base
+        });
+    };
     
     /**
      * turns a params object into a url

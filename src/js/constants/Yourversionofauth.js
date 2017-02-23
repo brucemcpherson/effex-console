@@ -12,5 +12,12 @@ export default {
 	
 	tos: '...terms of service url',
 	
-	tutorialId:"...fb id of who can create tutorial ids"
+	tutorialId:"...fb id of who can create tutorial ids",
+	
+	apiBase: {
+	    dev:'your dev api url',
+	    alpha:'your alpa api url',
+	    prod:'your prod alpha api url' 
+	}
+	
 };

@@ -11,5 +11,11 @@ export default {
 	
 	tos: 'https://effex-site-xlibersion.c9users.io/effexconsole/index.html#/About',
 	
-	tutorialId:"plmQuNTxF6hdlSSM2CLHgW4ZrJk2"
+	tutorialId:"plmQuNTxF6hdlSSM2CLHgW4ZrJk2",
+	
+	apiBase: {
+	    dev:'https://nodestuff-xlibersion.c9users.io',
+	    alpha:'http://v1.effexapi.org',
+	    prod:'https://ephex-auth.appspot-preview.com' 
+	}
 };

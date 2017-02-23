@@ -7,6 +7,7 @@ import moment from 'moment';
 
 //-- all about authentication and managing the users account
 
+
 // get firebase going
 const firebaseApp = firebase.initializeApp(ca.config);
 const firebaseAuth = firebaseApp.auth();
