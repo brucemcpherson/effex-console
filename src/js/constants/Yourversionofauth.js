@@ -20,6 +20,8 @@ export default {
 	    prod:'your prod alpha api url' 
 	},
 	
-	effexAdmin:"some key to match EFFEX_ADMIN in your server config.json"
+	effexAdmin:"some key to match EFFEX_ADMIN in your server config.json",
+	
+	tutorialAccounts:["array of accountid that can do tutorials"]
 	
 };

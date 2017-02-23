@@ -245,7 +245,8 @@ export function atMakeEverything() {
 
   const state = Process.store.getState();
   // use a range of account ids for the tutorials to keep no of keys manageable
-  const accountId = state.tutorial.accountIds[Math.floor(Math.random() * (state.tutorial.accountIds.length))];
+  const pots = state.tutorial.accountIds.filter (d=>true);
+  const accountId = pots[Math.floor(Math.random() * (state.tutorial.accountIds.length))];
   const keyTypes = ['writer', 'reader', 'updater'];
 
   const getInitialBoss = (pack)  => {

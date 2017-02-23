@@ -1,4 +1,6 @@
 import cs from '../constants/params';
+import ca from '../constants/auth';
+
 import {
   delegateCommentary,
   delegateEveryCommentary
@@ -48,8 +50,7 @@ const initialState = {
     quotas:{}
   },
   
- 
-  accountIds: ['138','139','13a'],
+  accountIds: ca.tutorialAccounts,
   planId:'x'
   
 };

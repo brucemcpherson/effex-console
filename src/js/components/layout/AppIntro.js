@@ -45,7 +45,7 @@ export default class extends React.Component {
       <div>
         <div style={mainStyle}>
           <div style={{display:"table-cell",verticalAlign:"middle",textAlign:"center"}}>
-          <img src="/effexconsole/src/img/exn64.png"></img>
+          <img src="src/img/exn64.png"></img>
             <h1>Ephemeral Exchange API</h1>
             <h2>The easy way to share data between reluctant platforms</h2>
           </div>

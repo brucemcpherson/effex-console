@@ -19,5 +19,7 @@ export default {
 	    prod:'https://api-dot-ephex-auth.appspot-preview.com' 
 	},
 	
-	effexAdmin:"fd99a5d6e073e8c0aa2f7bd2877b5578df7c70f5b48632a37a7bf2aeee950364"
+	effexAdmin:"fd99a5d6e073e8c0aa2f7bd2877b5578df7c70f5b48632a37a7bf2aeee950364",
+	
+	tutorialAccounts:["1f7","1f9","1fa"]
 };
