@@ -92,6 +92,7 @@ export default class extends React.Component {
           pageResults={"accounts"}
           multiSelectable={false}
           maxRows={props.auth.profile.planId ? cs.plans[props.auth.profile.planId].MAX_ACCOUNTS : 1}
+          minRows={2}
           title="Accounts"
           subtitle={props.auth.displayName}
           removeAction={acRemoveAccount}
@@ -148,6 +149,7 @@ export default class extends React.Component {
           pageResults={"bosses"}
           multiSelectable={true}
           maxRows={cs.plans.a.MAX_BOSSES}
+          minRows={1}
           title="Boss Keys"
           subtitle={selectedAccount ? `account ${selectedAccount}`:null}
           removeAction={acRemoveBoss}

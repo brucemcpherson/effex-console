@@ -18,6 +18,8 @@ export default {
 	    dev:'your dev api url',
 	    alpha:'your alpa api url',
 	    prod:'your prod alpha api url' 
-	}
+	},
+	
+	effexAdmin:"some key to match EFFEX_ADMIN in your server config.json"
 	
 };

@@ -3,14 +3,17 @@ import axios from 'axios';
 export default  (function (ns) {
     
     // the api base url
-    let ax; 
+    let ax;
+    let admin; 
     
-    ns.setBase = function (base) {
+    ns.setBase = function (base , adminKey) {
         ax  = axios.create({
             baseURL:base
         });
+        admin = adminKey;
     };
     
+
     /**
      * turns a params object into a url
      * @param {object} params the params
@@ -27,13 +30,22 @@ export default  (function (ns) {
     }
     
     /**
+     * turns a params object into an a url + admin key 
+     * @param {object} params the params
+     * @return {string} the uri
+     */
+    function makeAdmin (params) {
+        return  makeParams ({...(params || {}),admin:admin});
+    }
+    
+    /**
      * @param {string} accountId the account id
      * @param {string} planId the plan type
      * @param {object} params the lifetime of the key in seconds
      * @return {Promise} to the result
      */
     ns.generateBoss = function (accountId, planId, params) {
-        return ax.get (`/admin/account/${accountId}/boss/${planId}${makeParams(params)}`);
+        return ax.get (`/admin/account/${accountId}/boss/${planId}${makeAdmin(params)}`);
     };
     
     /**
@@ -153,7 +165,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.registerAccount = function (accountId, authId, active) {
-        return ax.post (`/admin/register/${accountId}`,{
+        return ax.post (`/admin/register/${accountId}${makeAdmin()}`,{
             data:{
                 authid:authId,
                 active:active
@@ -165,7 +177,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.removeAccount = function (accountId) {
-        return ax.delete (`/admin/remove/${accountId}`);
+        return ax.delete (`/admin/remove/${accountId}${makeAdmin()}`);
     };
     
     /**
@@ -173,7 +185,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.pruneBosses = function (accountId) {
-        return ax.delete (`/admin/prune/${accountId}`);
+        return ax.delete (`/admin/prune/${accountId}${makeAdmin()}`);
     };
     
     /**
@@ -181,7 +193,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.getBosses = function (accountId) {
-        return ax.get(`/admin/bosses/${accountId}`);
+        return ax.get(`/admin/bosses/${accountId}${makeAdmin()}`);
     };
     
     /**
@@ -190,7 +202,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.getStats = function (accountId,params) {
-        return ax.get(`/admin/stats/${accountId}${makeParams(params)}`);
+        return ax.get(`/admin/stats/${accountId}${makeAdmin(params)}`);
     };
     
     
@@ -199,7 +211,7 @@ export default  (function (ns) {
      * @return {Promise} to the result
      */
     ns.removeBosses = function (bossKeys) {
-        return ax.put(`/admin/bosses/`, {
+        return ax.put(`/admin/bosses/${makeAdmin()}`, {
             data:{
                 keys:bossKeys
             }

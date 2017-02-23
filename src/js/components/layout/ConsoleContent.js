@@ -128,7 +128,7 @@ export default class extends React.Component {
           name:'remove',
           action:()=>this.setState ({ dialogOpen:true }),
           secondary:true,
-          disabled:rows.length < 2
+          disabled:rows.length <= this.props.minRows
         }
       ] : null;
     
