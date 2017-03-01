@@ -17,7 +17,7 @@ export default class  extends React.Component {
           title={"A data item can be read using the key that wrote it"} 
           subtitle = {
             `some items will have been created automatically along with any keys needed for
-            the demonstration`
+            the demonstration.`
           }
           intro = {
             `You can pick which item to read from the list below which will also show the items 

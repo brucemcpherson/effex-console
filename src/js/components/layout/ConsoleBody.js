@@ -1,6 +1,7 @@
 import React from "react";
 
 import cs from '../../constants/params';
+import XClipboard from '../XClipboard';
 
 import {
   acAddAccount,
@@ -179,7 +180,7 @@ export default class extends React.Component {
           makeRows={(ids,data)=>{
             return (data.keys || [])
               .map ((k,i)=>{
-                  return [k,moment(data.coupons[i].validtill).format("lll")];
+                  return [<XClipboard content={k}/>,moment(data.coupons[i].validtill).format("lll")];
               });
           }}
           dialogContent={(bossKeys) => `The boss keys ${bossKeys} 

@@ -17,7 +17,11 @@ const initialState = {
     item:[],
     read:[],
     shared:[],
-    sharedUpdate:[]
+    sharedUpdate:[],
+    aliasitem:[],
+    aliasshared:[],
+    aliassharedUpdate:[],
+    alias:[]
   },
   
   everything: {
@@ -47,7 +51,9 @@ const initialState = {
     remove:{},
     service:{},
     makeEverything:{}, 
-    quotas:{}
+    quotas:{},
+    alias:{},
+    readAlias:{}
   },
   
   accountIds: ca.tutorialAccounts,
@@ -67,7 +73,8 @@ export default function(state = initialState, action) {
     cs.actions.T_VALIDATE_KEY,
     cs.actions.T_PING,
     cs.actions.T_REMOVE_ITEM,
-    cs.actions.T_FETCH_QUOTAS
+    cs.actions.T_FETCH_QUOTAS,
+    cs.actions.T_REGISTER_ALIAS
   ];
   
   // figure out what status is being reported
@@ -112,9 +119,23 @@ export default function(state = initialState, action) {
         state.pageResults[action.payload.pageResults] = everything;
         
         // it's possible this has to be added to the past history
+        // but we wont allow duplicate
         if (action.payload.add) {
           const sp = [...state.past[action.payload.pageResults]];
-          sp.push (action.payload.result);
+          let dc;
+          if (action.payload.dupCheck) {
+            dc = sp.some (d=>action.payload.result.data[action.payload.dupCheck] === d.data[action.payload.dupCheck]);
+          }
+          if (dc) {
+            sp.forEach ((d,i,a)=>{
+              if (action.payload.result.data[action.payload.dupCheck] === d.data[action.payload.dupCheck]) {
+                a[i] = action.payload.result; 
+              }
+            });
+          }
+          else {
+            sp.push (action.payload.result);
+          }
           state.past[action.payload.pageResults] = sp;
         }
 
@@ -175,7 +196,7 @@ export default function(state = initialState, action) {
             p[c] = [everything.things[c]];
           }
           return p;
-        }, {});
+        }, {...initialState.past});
         
         state = {...state, everything, past} ;
         state.pageResults[action.payload.pageResults] = everything;

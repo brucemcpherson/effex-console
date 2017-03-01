@@ -144,7 +144,8 @@ export default class  extends React.Component {
       content = { 
         <span> 
          <p>You'll be able to use the writer key you select here to access the data item later. A private
-         item doesn't include any readers or updaters optional parameters</p>
+         item doesn't include any readers or updaters optional parameters. Note that you should never store any personally identifiable
+          information in the exchange.</p>
          {writers}
           <div>  
             <XSelect 

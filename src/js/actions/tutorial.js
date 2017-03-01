@@ -104,6 +104,7 @@ export function atGenerateKeys(pack) {
 function ecPattern (action, pack, func) {
   
   // only if we;re not already doing it
+  
   const state = Process.store.getState();
   if (state.tutorial.pageResults[pack.pageResults].active) return null;
   
@@ -172,6 +173,24 @@ export function atRemoveItem(pack) {
 }
 /**
  * GOOD
+ * register an alias
+ * @param {object} options the options
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atRegisterAlias(pack) {
+
+  const aliasItem = (pack) => {
+    return EC.registerAlias(pack.writer, pack.key, pack.id, pack.alias, pack.params)
+      .then(pr => {
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+
+  };
+
+  return ecPattern (cs.actions.T_REGISTER_ALIAS, pack, aliasItem);
+}
+/**
+ * GOOD
  * read a given item
  * @param {object} options the options
  * @return {null|object} and action object or null if one is already in flight with the same pageresult
@@ -235,7 +254,9 @@ export function atClearResult(pack) {
 
 }
 /**
- * GOOD
+ * This is fairly complex because we're putting together
+ * results from a number of async queries that depend on each other
+ * and which return different shaped results
  * generate all the keys we're going to need for the tutorial
  * its better to just do this once as doing it piecemeal
  * causes complicated stuff when entering a page
@@ -248,7 +269,11 @@ export function atMakeEverything() {
   const pots = state.tutorial.accountIds.filter (d=>true);
   const accountId = pots[Math.floor(Math.random() * (state.tutorial.accountIds.length))];
   const keyTypes = ['writer', 'reader', 'updater'];
+  const itemTypes = ['item','shared','sharedUpdate'];
+  
 
+  
+  // used to get a boss key
   const getInitialBoss = (pack)  => {
     return EC.generateBoss(accountId, state.tutorial.planId, {
       seconds: cs.tutorial.bossLife,
@@ -289,16 +314,63 @@ export function atMakeEverything() {
            updaters:pack.updater.result.data.keys[0]
          })
     ])
-    .then (pr=>{
-
-       return ['item','shared','sharedUpdate']
-       .reduce((p,c,i) => {
+    .then (pr=> {
+      return itemTypes.reduce((p,c,i) => {
         p[c] = {result:pr[i],success:pr[i].data && pr[i].data.ok};
         return p;
        }, {...pack});
     });
   };
   
+  // get all the alias items
+  const getAliases = (pack) => {
+    // use this to extract the keys from the different format
+    const kep = {"updaters":d=>d[0],  "readers":d=>d[0], "writer":d=>d};
+    // thes are what needs to be called to generate aliases.. pack contains the results
+    // from getting various items
+    const aMap = Object.keys(pack).filter(e=>itemTypes.indexOf(e) !==-1).map ((e,i)=> {
+      // the kind of key to extract can be deduced from the properties of the data
+      const d = pack[e].result;
+      let k;
+      if (pack[e].success) {
+        k = Object.keys(kep).filter(e=>Object.keys(d.data).indexOf(e) !==-1)[0];
+      }
+      if (!k) {
+        return Promise.reject("failed to find correct property in data", d.data);
+      }
+      else {
+        
+        return EC.registerAlias(
+          pack.writer.result.data.keys[0],
+          kep[k](d.data[k]),
+          d.data.id,
+          "alias-"+keyTypes[i]);
+      }
+      
+    });
+    // we'll do these all at once
+    return Promise.all(aMap)
+    .then (pr=>{
+      // push all the results together
+      return itemTypes.reduce((p,c,i) => {
+        p['alias'+c] = {result:pr[i],success:pr[i].data && pr[i].data.ok};
+        return p;
+       }, {...pack});
+
+    });
+  };  
+
+
+/*
+       return ['item','shared','sharedUpdate','alias']
+       .reduce((p,c,i) => {
+        p[c] = {result:pr[i],success:pr[i].data && pr[i].data.ok};
+        return p;
+       }, {...pack});
+    })
+
+  };
+*/  
   // only do it if necessary to avoid multiple calling
   if (state.tutorial.everything.active || state.tutorial.everything.ready || state.tutorial.everything.error) return null;
   
@@ -307,6 +379,7 @@ export function atMakeEverything() {
     return getInitialBoss ({})
     .then (pr=> getInitialKeys(pr))
     .then (pr=> getInitialItems(pr))
+    .then (pr=> getAliases(pr))
     .then (pr=> {
       const ek = Object.keys (pr).filter (d=>!pr[d].success);
       const errors = ek.map(d=>pr[d].result);

@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 
 //import logger from 'redux-logger';
 
-// add logger() to get store logging back.
+// add logger() to get store logging back.,logger()
 const middleWare = applyMiddleware(thunk);  
 
 export default function configureStore(initialState) {

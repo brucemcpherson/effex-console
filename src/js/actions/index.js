@@ -165,6 +165,7 @@ export function acPromise (actionType,  pendingPayload, func) {
         resolve(func());
       }
       catch(err) {
+        console.log("acpromise failure", actionType , err);
         reject (err);
       }
     });

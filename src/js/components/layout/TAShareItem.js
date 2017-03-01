@@ -83,7 +83,7 @@ export default class  extends React.Component {
     const keysOb = this.getPotentialKeys (nextProps ,this.state.touchCollections );
     const writer = this.getPotentialKeys (nextProps,["writer"]).writer;
     const con = {...keysOb,writer};
-    console.log(con);
+    
     const touchSelected = this.state.touchSelected;
     
     // set defaults for selected keys as they arrive.

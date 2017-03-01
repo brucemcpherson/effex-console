@@ -47,6 +47,11 @@ export default class  extends React.Component {
             the Free plan has generous rate and quota limits. Rate limiting is necessary to protect the API
             against accidental or malicious misuse. Data lifetime is limited to 12 hours after which it will be removed
             from the store and its key will expire.</p>
+            <h4>Personally identifiable information</h4>
+            <p>This is a public data store, although it is protected by encryption and access keys. Many countries have
+            data protection laws covering which data can be stored and where they can be physically resident.
+            You should not store personally identifiable information in the store. Google have a useful 
+            <a href="https://support.google.com/analytics/answer/6366371">guide</a> that describes how to avoid storing such data.</p>
             </span>
             } 
             subtitle={"What is this API all about"}

@@ -27,6 +27,8 @@ import ASharedUpdateItem from './pages/ASharedUpdateItem';
 import APing from './pages/APing';
 import ARemoveItem from './pages/ARemoveItem';
 import AQuotas from './pages/AQuotas';
+import AAlias from './pages/AAlias';
+import AReadAliasItem from './pages/AReadAliasItem';
 
 import {
   Provider
@@ -43,7 +45,8 @@ import {
   Route,
   IndexRoute,
   hashHistory,
-  Link
+  Link,
+  IndexLink
 }
 from "react-router";
 
@@ -145,6 +148,12 @@ Process.xRoutes = [
     label: 'Removing',
     component: ARemoveItem
   }, {
+    label: 'Aliases',
+    component: AAlias
+  },{
+    label: 'Alias access',
+    component: AReadAliasItem
+  },{
     label: 'Quotas',
     component: AQuotas
   }]
@@ -175,18 +184,14 @@ function mapNested(item, route) {
     // make a cross reference
     Process.xRef[path] = key;
 
-    // and map the list items
     return (
 
         <ListItem 
-            primaryText = {
-              <Link style={{ textDecoration: 'none' }} 
-              to={path}>{item.label}</Link>
-            } 
+            primaryText = {item.label}
             key={key}
             value={key}
-           
-
+            containerElement={<IndexLink to={path} />}
+            primaryTogglesNestedList={true}
           />
           
         );
@@ -205,6 +210,7 @@ function mapNested(item, route) {
             nestedItems = {ics}
             key={key}
             value={key}
+            primaryTogglesNestedList={true}
             
           />
         );

@@ -28,9 +28,9 @@ export default class  extends React.Component {
       // the key to use to access the item
       touchSelected:"",
       // the kind of keys that can be found in the item to use
-      touchCollections:["updaters","writer"],
+      touchCollections:["updaters","writer","key"],
       // the type of items that can be used for this page
-      keyTypes:["sharedUpdate"],
+      keyTypes:["sharedUpdate","aliassharedUpdate","aliasitem"],
       // the selected item key to use
       keyValue:"",
       // a list of keys that have been derived as able to touch the item
@@ -58,9 +58,7 @@ export default class  extends React.Component {
   }
   
   componentWillUnmount () {
-    // this will ensure we get any updated value for the selected item if item is reentered
-    console.log('unmounted');
-    
+
     // clear the last tempresult so we dont use it again
     const ad = atClearResult({
       pageResults:this.state.tempResults
@@ -125,11 +123,11 @@ export default class  extends React.Component {
     // next if there is a selected item, make sure it still exists
     let keyValue = this.state.keyValue;
     if (!keyValue && items.length && items[0].data && items[0].data.ok) {
-      keyValue = items[0].data.id;
+      keyValue = items[0].data.alias || items[0].data.id;
     }
     else {
       // check that its still an existing key for this item
-      if (!items.some(d=>d && d.data && d.data.ok && d.data.id === keyValue) ) {
+      if (!items.some(d=>d && d.data && d.data.ok && (d.data.alias === keyValue || d.data.id === keyValue)) ) {
         keyValue = "";
       }
     }
@@ -138,7 +136,7 @@ export default class  extends React.Component {
       keyValue
     });
 
-    const item = items.length ? items.filter (d=>d.data && d.data.ok && d.data.id === keyValue)[0] : null;
+    const item = items.length ? items.filter (d=>d.data && d.data.ok && (d.data.alias === keyValue || d.data.id === keyValue))[0] : null;
     
     // and then add the touchers
     let touchers;
@@ -249,7 +247,7 @@ export default class  extends React.Component {
     // generate any options from the past that can be used for this
     // reduce to id
     const options = itemList.filter(d=>d.data && d.data.ok)
-    .map(d=>d.data.id) 
+    .map(d=>d.data.alias || d.data.id) 
     .slice()
     .reverse();
     

@@ -16,7 +16,7 @@ export default class  extends React.Component {
         // the kind of keys that can be found in the item to use
         touchCollections:["writer"],
         // the type of items that can be used for this page
-        keyTypes:["shared","sharedUpdate","item"],
+        keyTypes:["shared","sharedUpdate","item","alias","aliasitem","aliasshared","aliassharedUpdate"],
         // the selected item key to use
         keyValue:"",
         // a list of keys that have been derived as able to touch the item

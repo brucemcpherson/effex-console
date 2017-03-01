@@ -20,9 +20,11 @@ export default class  extends React.Component {
   constructor (props) {
     super (props);
     this.state = props.initialState;
+    
   }
 
   componentDidMount () {
+    
     this.propsUpdated (this.props);
   }
   
@@ -33,7 +35,7 @@ export default class  extends React.Component {
   getPotentialItems = (props, state) => {
     const tutorial = this.props.tutorial;
     return state.keyTypes.reduce ((p,c) => {
-      p.push (...tutorial.past[c]);
+      if (tutorial.past[c])p.push (...tutorial.past[c]);
       return p;
     } , []);
   }
@@ -43,6 +45,7 @@ export default class  extends React.Component {
    * we have some new props
    */
   componentWillReceiveProps (nextProps) {
+    
    this.propsUpdated (nextProps);
   }
 
@@ -51,6 +54,7 @@ export default class  extends React.Component {
    */
   propsUpdated = (nextProps) => {
 
+   
     // first set up the potential items
     const items = this.getPotentialItems(nextProps , this.state);
     // and set these  for later
@@ -61,11 +65,11 @@ export default class  extends React.Component {
     // next if there is a selected item, make sure it still exists
     let keyValue = this.state.keyValue;
     if (!keyValue && items.length && items[0].data && items[0].data.ok) {
-      keyValue = items[0].data.id;
+      keyValue = items[0].data.alias || items[0].data.id;
     }
     else {
       // check that its still an existing key for this item
-      if (!items.some(d=>d && d.data && d.data.ok && d.data.id === keyValue) ) {
+      if (!items.some(d=>d && d.data && d.data.ok && (d.data.id === keyValue || d.data.alias === keyValue)) ) {
         keyValue = "";
       }
     }
@@ -74,7 +78,7 @@ export default class  extends React.Component {
       keyValue
     });
 
-    const item = items.length ? items.filter (d=>d.data && d.data.ok && d.data.id === keyValue)[0] : null;
+    const item = items.length ? items.filter (d=>d.data && d.data.ok && (d.data.alias === keyValue || d.data.id === keyValue))[0] : null;
     
     // and then add the touchers
     let touchers;
@@ -157,7 +161,7 @@ export default class  extends React.Component {
     // generate any options from the past that can be used for this
     // reduce to id
     const options = itemList.filter(d=>d.data && d.data.ok)
-    .map(d=>d.data.id) 
+    .map(d=> (d.data.alias ||d.data.id)) 
     .slice()
     .reverse();
     
@@ -202,7 +206,7 @@ export default class  extends React.Component {
     // this is where the page results will have been reduced to
     const pt = this.props.tutorial.pageResults;    
     const pageResults =  pt && pt[this.state.pageResults] ?   pt[this.state.pageResults] : null;
-    
+   
     return (
 
         <Article 

@@ -89,10 +89,10 @@ export default  (function (ns) {
         
         if (method === "get") {
             params = {...params,data:data};
-            return ax.get (`/updater/${updater}/${id}${makeParams(params)}`);
+            return ax.get (`/updater/${updater}/${encodeURIComponent(id)}${makeParams(params)}`);
         }
         else if (method === "post") {
-            return ax.post (`/updater/${updater}/${id}${makeParams(params)}`,{
+            return ax.post (`/updater/${updater}/${encodeURIComponent(id)}${makeParams(params)}`,{
                 data:data
             });
         }
@@ -136,7 +136,7 @@ export default  (function (ns) {
      */
     ns.remove = function (id, writer  , params) {
         params = params || {};
-        return ax.delete (`/writer/${writer}/${id}${makeParams(params)}`);
+        return ax.delete (`/writer/${writer}/${encodeURIComponent(id)}${makeParams(params)}`);
     };
     
     /**
@@ -147,7 +147,7 @@ export default  (function (ns) {
      */
     ns.read = function (id, reader  , params) {
         params = params || {};
-        return ax.get (`/reader/${reader}/${id}${makeParams(params)}`);
+        return ax.get (`/reader/${reader}/${encodeURIComponent(id)}${makeParams(params)}`);
     };
     
     /**
@@ -217,6 +217,12 @@ export default  (function (ns) {
             }
         });
     };
+    
+    ns.registerAlias = function (writer, key, id , alias, params) {
+        return ax.get(`/${writer}/${key}/alias/${encodeURIComponent(alias)}/${id}${makeParams(params)}`);
+    };
+    
+    
     
     return ns;
 })({});

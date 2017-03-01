@@ -14,9 +14,9 @@ export default class  extends React.Component {
       ...this.props,initialState: {
         touchSelected:"",
         // the kind of keys that can be found in the item to use
-        touchCollections:["readers","updaters","writer"],
+        touchCollections:["readers","updaters","writer","key"],
         // the type of items that can be used for this page
-        keyTypes:["shared","sharedUpdate"],
+        keyTypes:["shared","sharedUpdate","aliasshared","aliassharedUpdate","alias","aliasitem"],
         // the selected item key to use
         keyValue:"",
         // a list of keys that have been derived as able to touch the item

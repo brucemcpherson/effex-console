@@ -1,6 +1,8 @@
 import React from "react";
 import XCard from '../XCard';
 import XTable from '../XTable';
+
+
 import {acStatsSelectedRows, acGenerateSlots} from '../../actions/index';
 import {  format as d3Format } from 'd3-format';
 
@@ -42,6 +44,7 @@ export default class extends React.Component {
           keyData[k].setsize ? df(keyData[k].setsize) : "-"];
     });
 
+  
     
     // set the selected rows .. controlled in the store
     const selectedItems = dataPlace && dataPlace.selectedItems ?  dataPlace.selectedItems : [];
