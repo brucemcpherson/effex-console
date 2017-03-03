@@ -25,13 +25,7 @@ const FB = (function(ns) {
    */
   ns.init = function() {
 
-    /**
-     * this is used to set up listening for changes to next account number
-     */
-    firebaseRef.ref(counterUrl)
-      .on('value', function(snapshot) {
-        Process.store.dispatch(acCounterAccounts(snapshot.val() || 0));
-      });
+    // nothing to do
 
   };
 
@@ -227,10 +221,21 @@ export function authInit() {
         // so listen for his accounts
         if (user) {
 
+        /**
+         * this is used to set up listening for changes to next account number
+         * 
+         */
+          const counterUrl = 'counters/accounts';
+          firebaseRef.ref(counterUrl)
+          .on('value', function(snapshot) {
+            Process.store.dispatch(acCounterAccounts(snapshot.val() || 0));
+          });
+      
           // and for changes to profile
           const profileUrl = 'users/' + user.uid + '/profile';
           
-          firebaseRef.ref(profileUrl).on('value', function(snapshot) {
+          firebaseRef.ref(profileUrl)
+          .on('value', function(snapshot) {
             var data = snapshot.val();
             if (data) {
 
@@ -246,7 +251,8 @@ export function authInit() {
           
           // also need to set up a listener for changes to the users accounts
           const url = 'users/' + user.uid + '/accounts';
-          firebaseRef.ref(url).on('value', function(snapshot) {
+          firebaseRef.ref(url)
+          .on('value', function(snapshot) {
             var data = snapshot.val();
             // if theres no data, then we want to create a default account
             if (data) {
@@ -355,6 +361,9 @@ export function acAuthUser(user) {
 }
 
 export function acCounterAccounts(counter) {
+  if (!counter) {
+    console.log ("warning-accounts counter is",counter);
+  }
   return {
     type: cs.actions.COUNTER_ACCOUNTS,
     payload: counter
