@@ -5,7 +5,7 @@ export default class Article extends React.Component {
   render() {
 
     return (
-      <div>
+      <div style={{fontFamily:"Noto Sans"}}>
         <h3>{this.props.title}</h3>
         <h4>{this.props.subtitle}</h4>
         <div>

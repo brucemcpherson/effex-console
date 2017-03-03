@@ -10,6 +10,7 @@ injectTapEventPlugin();
 
 const muiTheme = getMuiTheme({
   fontFamily: 'Noto sans, Roboto, sans-serif',
+  contentFontFamily: 'Noto sans, Roboto, sans-serif'
 });
 
 class App extends React.Component {

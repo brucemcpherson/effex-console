@@ -46,6 +46,7 @@ class XCard extends React.Component {
       <Card 
         expanded={this.state.expanded}
         onExpandChange={this.handleExpandChange}
+        style = {{fontFamily:"Noto Sans"}}
       >
         
         <CardHeader
