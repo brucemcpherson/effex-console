@@ -29,7 +29,7 @@ import ARemoveItem from './pages/ARemoveItem';
 import AQuotas from './pages/AQuotas';
 import AAlias from './pages/AAlias';
 import AReadAliasItem from './pages/AReadAliasItem';
-
+import ADemo from './pages/ADemo';
 import {
   Provider
 }
@@ -63,102 +63,37 @@ Process.xRef = {};
 // this approach will allow me to set up both the routes and 
 // the leftdrawer listitems consistently from this array
 Process.xRoutes = [
-  {
-    label: 'Home',
-    component: Home
-  },
+  
+  {label: 'Home',component: Home},
 
-  [{
-    label: 'Accounts'
-  }, {
-    label: 'Console',
-    component: Console
-  }, {
-    label: 'Dashboard',
-    component: Dashboard
-  }],
+  [{label: 'Accounts'}, {label: 'Console',component: Console}, {label: 'Dashboard',component: Dashboard}],
 
-  [{
-    label: 'Tutorial'
-  }, [{
-    label: 'Getting started',
-  }, {
-    label: 'Introduction',
-    component: TIntroduction
-  }, {
-    label: 'Registering',
-    component: TRegistering
-  }, {
-    label: 'Console',
-    component: TConsole
-  }, {
-    label: 'Accounts',
-    component: TAccounts
-  }, {
-    label: 'Boss key',
-    component: TBossKey
-  }, {
-    label: 'API explorer',
-    component: TApiExplorer
-  },{
-    label: 'Summary',
-    component: About
-  }],
+  [{label: 'Tutorial'},
+    
+    [{label: 'Getting started'}, {label: 'Introduction',component: TIntroduction}, {label: 'Registering',component: TRegistering}, 
+     {label: 'Console',component: TConsole}, {label: 'Accounts',component: TAccounts}, {label: 'Boss key',component: TBossKey}, 
+     {label: 'API explorer',component: TApiExplorer}, {label: 'Summary',component: About}
+    ],
 
-  [{
-    label: 'Access keys'
-  }, {
-    label: 'Boss',
-    component: ABossKey
-  }, {
-    label: 'Writer',
-    component: AWriterKey
-  }, {
-    label: 'Reader',
-    component: AReaderKey
-  }, {
-    label: 'Updater',
-    component: AUpdaterKey
-  }, {
-    label: 'Validate',
-    component: AValidateKey
-  }, {
-    label: 'Ping',
-    component: APing
-  }],
+    [{label: 'Access keys'}, {label: 'Boss',component: ABossKey}, 
+     {label: 'Writer',component: AWriterKey}, {label: 'Reader',component: AReaderKey}, {label: 'Updater',component: AUpdaterKey},
+     {label: 'Validate',component: AValidateKey}, {label: 'Ping',component: APing}
+    ],
 
-  [{
-    label: 'Data items'
-  }, {
-    label: 'Writing',
-    component: AWriteItem
-  }, {
-    label: 'Reading',
-    component: AReadItem
-  }, {
-    label: 'Sharing',
-    component: AShareItem
-  }, {
-    label: 'Sharing reading',
-    component: ASharedReadItem
-  }, {
-    label: 'Sharing updating',
-    component: ASharedUpdateItem
-  }, {
-    label: 'Removing',
-    component: ARemoveItem
-  }, {
-    label: 'Aliases',
-    component: AAlias
-  },{
-    label: 'Alias access',
-    component: AReadAliasItem
-  },{
-    label: 'Quotas',
-    component: AQuotas
-  }]
-
-]
+    [{label: 'Data items'}, {label: 'Writing',component: AWriteItem}, 
+     {label: 'Reading',component: AReadItem},
+     {label: 'Sharing',component: AShareItem}, 
+     {label: 'Sharing reading',component: ASharedReadItem}, 
+     {label: 'Sharing updating',component: ASharedUpdateItem}, 
+     {label: 'Removing',component: ARemoveItem}, 
+     {label: 'Aliases',component: AAlias}, 
+     {label: 'Alias access',component: AReadAliasItem}, 
+     {label: 'Quotas',component: AQuotas}
+    ]
+  ],
+  [{label: 'More'}, {label: 'Demo',component: ADemo}
+  ]
+  
 ].map(d => mapNested(d));
 
 
@@ -186,26 +121,29 @@ function mapNested(item, route) {
 
     return (
 
-        <ListItem 
+      <ListItem 
             primaryText = {item.label}
             key={key}
             value={key}
-            containerElement={<IndexLink to={path} />}
-            primaryTogglesNestedList={true}
-          />
-          
-        );
-      }
-      else {
-        // we're going deeper to extend the route so far
-        route += "/" + item[0].label.replace(/\s/g,"_").toLowerCase();
-        
-        // recurse and get all the children
-        let ics = item.slice(1).map((d)=>mapNested(d,route));
-        
-        // this list item will contain the children as nested items 
-        return (
-          <ListItem 
+            containerElement={<IndexLink to={path} />
+    }
+    primaryTogglesNestedList = {
+      true
+    }
+    />
+
+  );
+}
+else {
+  // we're going deeper to extend the route so far
+  route += "/" + item[0].label.replace(/\s/g, "_").toLowerCase();
+
+  // recurse and get all the children
+  let ics = item.slice(1).map((d) => mapNested(d, route));
+
+  // this list item will contain the children as nested items 
+  return (
+    <ListItem 
             primaryText = {item[0].label} 
             nestedItems = {ics}
             key={key}
@@ -213,15 +151,15 @@ function mapNested(item, route) {
             primaryTogglesNestedList={true}
             
           />
-        );
-      }
-    }
-    
+  );
+}
+}
 
-  Process.init()
-  .then(()=> {
-    
-     ReactDOM.render((
+
+Process.init()
+  .then(() => {
+
+    ReactDOM.render((
       <Provider store={Process.store}>
         <Router history={hashHistory}>
           <Route path="/" component={App}>
