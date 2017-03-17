@@ -2,6 +2,7 @@ import React from "react";
 import CopyToClipboard from 'react-copy-to-clipboard'
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
+import {indigo500} from 'material-ui/styles/colors';
 export default class  extends React.Component {
   
   render() {
@@ -11,7 +12,7 @@ export default class  extends React.Component {
     
     return  content ? 
       <span>
-        <span>{content}</span>
+        <span style={{color:indigo500}}>{content}</span>
         <CopyToClipboard text={content}>
           <IconButton tooltip="copy"><FontIcon className="material-icons">content_copy</FontIcon></IconButton>
         </CopyToClipboard>

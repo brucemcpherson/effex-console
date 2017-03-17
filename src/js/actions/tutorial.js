@@ -1,6 +1,7 @@
 import cs from '../constants/params';
 import Process from '../containers/process';
-import EC from '../containers/effexclientapi';
+import EC from 'effex-api-client';
+
 import {
   acPromise,
   getTutorialUid
@@ -128,7 +129,7 @@ function ecPattern (action, pack, func) {
 export function atUpdateItem(pack) {
 
   const updateItem = (pack) => {
-    return EC.update(pack.id, pack.key, pack.method, pack.data, pack.params)
+    return EC.update( pack.data, pack.id, pack.key, pack.method, pack.params)
       .then(pr => {
         return {...pack,result:pr,success:pr.data && pr.data.ok};
       });
@@ -146,7 +147,7 @@ export function atUpdateItem(pack) {
 export function atWriteItem(pack) {
 
   const writeItem = (pack) => {
-    return EC.write(pack.key, pack.method, pack.data, pack.params)
+    return EC.write( pack.data,pack.key, pack.method, pack.params)
       .then(pr => {
         return {...pack,result:pr,success:pr.data && pr.data.ok};
       });
@@ -222,6 +223,22 @@ export function atFetchQuotas (pack) {
   };
 
   return ecPattern (cs.actions.T_FETCH_QUOTAS, pack, quotas);
+}
+/**
+ * GOOD
+ * ping service
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atInfo (pack) {
+
+  const info = (pack) => {
+    return EC.info()
+      .then(pr => {
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+  };
+
+  return ecPattern (cs.actions.T_INFO, pack, info);
 }
 /**
  * GOOD
@@ -304,13 +321,13 @@ export function atMakeEverything() {
 
     return Promise.all([
       !pack.writer.success ? 
-         Promise.resolve({}) : EC.write(pack.writer.result.data.keys[0], method, "a data item that can be read only by the creator"),
+         Promise.resolve({}) : EC.write( "a data item that can be read only by the creator",pack.writer.result.data.keys[0], method),
       !pack.reader.success ? 
-         Promise.resolve({}) : EC.write(pack.writer.result.data.keys[0], method, "a data item that can be read by another", {
+         Promise.resolve({}) : EC.write( "a data item that can be read by another", pack.writer.result.data.keys[0], method,{
            readers:pack.reader.result.data.keys[0]
          }),
       !pack.updater.success ? 
-         Promise.resolve({}) : EC.write(pack.writer.result.data.keys[0], method, "a data item that can be updated by another", {
+         Promise.resolve({}) : EC.write("a data item that can be updated by another",pack.writer.result.data.keys[0], method,  {
            updaters:pack.updater.result.data.keys[0]
          })
     ])

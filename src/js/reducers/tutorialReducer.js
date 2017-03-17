@@ -48,6 +48,7 @@ const initialState = {
     sharedRead:{},
     validate:{},
     ping:{},
+    info:{},
     remove:{},
     service:{},
     makeEverything:{}, 
@@ -72,6 +73,7 @@ export default function(state = initialState, action) {
     cs.actions.T_GENERATE_KEYS,
     cs.actions.T_VALIDATE_KEY,
     cs.actions.T_PING,
+    cs.actions.T_INFO,
     cs.actions.T_REMOVE_ITEM,
     cs.actions.T_FETCH_QUOTAS,
     cs.actions.T_REGISTER_ALIAS

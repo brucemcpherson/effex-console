@@ -37,6 +37,7 @@ export default {
         T_RESULT:'T_RESULT',
         T_GENERATE_KEYS: 'T_GENERATE_KEYS', 
 	    T_PING:'T_PING',
+	    T_INFO:'T_INFO',
         T_VALIDATE_KEY:'T_VALIDATE_KEY',
         T_FETCH_QUOTAS:'T_FETCH_QUOTAS',
         T_REGISTER_ALIAS:'T_REGISTER_ALIAS',

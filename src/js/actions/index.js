@@ -1,7 +1,7 @@
 import cs from '../constants/params';
 import ca from '../constants/auth';
 import Process from '../containers/process';
-import EC from '../containers/effexclientapi';
+import EC from 'effex-api-client';
 import firebase from 'firebase';
 import moment from 'moment';
 

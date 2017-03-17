@@ -4,7 +4,7 @@
  */
 import configureStore from '../store/configureStore';
 import {authInit} from '../actions/index';
-import EC from '../containers/effexclientapi';
+import EC from 'effex-api-client';
 import ca from '../constants/auth';
 
 const Process = (function(ns) {

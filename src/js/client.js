@@ -25,6 +25,7 @@ import AShareItem from './pages/AShareItem';
 import ASharedReadItem from './pages/ASharedReadItem';
 import ASharedUpdateItem from './pages/ASharedUpdateItem';
 import APing from './pages/APing';
+import AInfo from './pages/AInfo';
 import ARemoveItem from './pages/ARemoveItem';
 import AQuotas from './pages/AQuotas';
 import AAlias from './pages/AAlias';
@@ -77,7 +78,7 @@ Process.xRoutes = [
 
     [{label: 'Access keys'}, {label: 'Boss',component: ABossKey}, 
      {label: 'Writer',component: AWriterKey}, {label: 'Reader',component: AReaderKey}, {label: 'Updater',component: AUpdaterKey},
-     {label: 'Validate',component: AValidateKey}, {label: 'Ping',component: APing}
+     {label: 'Validate',component: AValidateKey}, {label: 'Ping',component: APing}, {label: 'Info',component: AInfo}
     ],
 
     [{label: 'Data items'}, {label: 'Writing',component: AWriteItem}, 
@@ -91,7 +92,7 @@ Process.xRoutes = [
      {label: 'Quotas',component: AQuotas}
     ]
   ],
-  [{label: 'More'}, {label: 'Demo',component: ADemo}
+  [{label: 'More'}, {label: 'Demo Videos',component: ADemo}
   ]
   
 ].map(d => mapNested(d));
