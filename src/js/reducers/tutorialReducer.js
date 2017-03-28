@@ -9,6 +9,16 @@ from './delegates';
 
 const initialState = {
   
+  jsonKeys: {
+    writer:"",
+    reader:"",
+    updater:"",
+    item:"",
+    alias:"",
+    code:'{"demo":"enter json data here or read from store"}',
+    boss:""
+  },
+  
   past: {
     boss:[],
     writer:[],
@@ -35,6 +45,7 @@ const initialState = {
   },
   
   pageResults: {
+    ajson:{},
     boss:{},
     writer:{},
     updater:{},
@@ -54,7 +65,9 @@ const initialState = {
     makeEverything:{}, 
     quotas:{},
     alias:{},
-    readAlias:{}
+    readAlias:{},
+    jsonKeyResults:{},
+    jsonItemResults:{}
   },
   
   accountIds: ca.tutorialAccounts,
@@ -76,7 +89,12 @@ export default function(state = initialState, action) {
     cs.actions.T_INFO,
     cs.actions.T_REMOVE_ITEM,
     cs.actions.T_FETCH_QUOTAS,
-    cs.actions.T_REGISTER_ALIAS
+    cs.actions.T_REGISTER_ALIAS,
+    cs.actions.T_WRITE_JSON_ITEM,
+    cs.actions.T_READ_JSON_ITEM,
+    cs.actions.T_UPDATE_JSON_ITEM,
+    cs.actions.T_REMOVE_JSON_ITEM
+
   ];
   
   // figure out what status is being reported
@@ -105,6 +123,9 @@ export default function(state = initialState, action) {
       case "PENDING": {
         state = {...state};
         state.pageResults[action.payload.pageResults] = {...initialState.everything,active:true};
+        if (action.type === cs.actions.T_WRITE_JSON_ITEM) {
+          state.jsonKeys.item="";
+        }
         return state;
       }
       
@@ -140,7 +161,19 @@ export default function(state = initialState, action) {
           }
           state.past[action.payload.pageResults] = sp;
         }
-
+        
+        // extra step for json writer/reader
+        var aw = action.payload.result && action.payload.result.data;
+        if (act === cs.actions.T_WRITE_JSON_ITEM) {
+          state.jsonKeys.item = (aw && aw.ok && aw.id) || "";
+          state.jsonKeys.alias = (aw && aw.ok && aw.alias)|| "";
+        }
+        
+        if (act === cs.actions.T_READ_JSON_ITEM) {
+          state.jsonKeys.code = (aw && aw.ok && JSON.stringify(aw.value,null,2)) || "";
+        }
+        
+        
         return state;
       }
       
@@ -154,7 +187,7 @@ export default function(state = initialState, action) {
         };
         state = {...state};
         state.pageResults[action.payload.pageResults] = everything;
-        
+
         return state;
       }
     }
@@ -170,7 +203,49 @@ export default function(state = initialState, action) {
   switch (action.type) {
     
     
-    //---generate all the keys we'd need for a tutorial
+    // -- store any keys being used for json editing
+    
+    case cs.actions.T_AJSON_KEYS: {
+      state = {...state};
+      state.jsonKeys[action.payload.type] = action.payload.value;
+      return state;
+    }
+    
+   
+    case cs.actions.T_GET_SOMEKEYS + "_PENDING": {
+      state = {...state};
+      state.pageResults[action.payload.pageResults] = {...initialState.everything,active:true,things:action.payload.result};
+      return state;
+    }
+    
+    case cs.actions.T_GET_SOMEKEYS + "_FULFILLED": {
+      state = {...state};
+      state.pageResults[action.payload.pageResults] = {active:false, ready:true, things:action.payload.result};
+      var ap = action.payload.result;
+      
+      Object.keys (action.payload.result)
+      .forEach (function (d) {
+        // oops... writer in payload, writers in store
+        var k = state.jsonKeys.hasOwnProperty(d) ? d : d + "s";
+        var r = ap[d];
+        state.jsonKeys[k] = r.success ? 
+          (r.result.data.keys? r.result.data.keys[0] : r.result.data.key) : 
+          ("failed to generate:" + r.result.statusText + "-" + ((r.result.data && r.result.data.error) || ""));    
+      });
+      return state;
+    }
+    
+    case cs.actions.T_GET_SOMEKEYS + "_REJECTED": {
+      state = {...state};
+      state.pageResults[action.payload.pageResults] = {active:false, ready:true, things:action.payload.result};
+      ['updater','writer','reader']
+      .forEach (function (d) {
+          state.jsonKeys[d] = "failed to generate:API error";
+      });
+      return state;
+    }
+    
+     //---generate all the keys we'd need for a tutorial
     case cs.actions.T_MAKE_EVERYTHING + "_PENDING": {
 
       const everything = {...initialState.everything,active:true};
@@ -179,6 +254,7 @@ export default function(state = initialState, action) {
 
     }
     
+
     case cs.actions.T_MAKE_EVERYTHING + "_FULFILLED":
       {
         
@@ -206,7 +282,7 @@ export default function(state = initialState, action) {
         return state;
       }
       
-      
+
     case cs.actions.T_MAKE_EVERYTHING + "_REJECTED":
       {
         const everything = {

@@ -14,7 +14,7 @@ const Process = (function(ns) {
 
       // set the base url for the api- these are defined in the constants file
       EC.setBase(ca.apiBase.prod,ca.effexAdmin);
-      
+      //EC.setBase(ca.apiBase.dev,ca.effexAdmin);
       // set up redux store
       ns.store = configureStore({});
 

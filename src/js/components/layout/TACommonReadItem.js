@@ -24,7 +24,7 @@ export default class  extends React.Component {
   }
 
   componentDidMount () {
-    
+
     this.propsUpdated (this.props);
   }
   

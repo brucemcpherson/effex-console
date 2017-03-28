@@ -4,10 +4,12 @@ var path = require('path');
 console.log(debug? "development":"production");
 
 
+
 module.exports = {
   context: path.join(__dirname, "src"),
   devtool: debug ? "eval" : 'cheap-module-source-map',
   entry: "./js/client.js",
+
   module: {
     loaders: [
       {
@@ -18,6 +20,10 @@ module.exports = {
           presets: ['react', 'es2015', 'stage-0'],
           plugins: ['react-html-attrs', 'transform-decorators-legacy', 'transform-class-properties'],
         }
+      },
+      {
+        test: /\.css$/,
+        loaders: [ 'style-loader', 'css-loader' ]
       }
     ]
   },

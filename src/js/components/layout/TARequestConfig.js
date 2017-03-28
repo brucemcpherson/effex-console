@@ -18,7 +18,7 @@ export default class  extends React.Component {
           subtitle = {"the http method"}
           content =
             {config ? <span>
-              <div>payload: {config.data ? JSON.stringify(config.data) : "n/a"}</div>
+              <div>payload: {config.data ? config.data : "n/a"}</div>
               <div>method: {config.method}</div></span> : 
               <TANotExecuted />}
          />

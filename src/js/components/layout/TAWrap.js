@@ -13,6 +13,7 @@ import TAWaitingForKeys from './TAWaitingForKeys';
 import MenuWrapper from './MenuWrapper';
 import TAService from './TAService';
 import TAEverything from './TAEverything';
+
 @connect(store => {
   return {
     tutorial: store.tutorial
@@ -21,7 +22,6 @@ import TAEverything from './TAEverything';
 
 export default class  extends React.Component {
 
-
   /**
    * when component mounts, kick off a request to get some keys
    * nothing will happen if we already have them
@@ -29,9 +29,11 @@ export default class  extends React.Component {
    */
   componentDidMount(){
     this.props.dispatch (acMenuSelectedValue(Process.xRef[this.props.location.pathname]));
-    const ab = atMakeEverything();
-    if (ab) {
-      this.props.dispatch (ab);
+    if (!this.props.skipKeys) {
+      const ab = atMakeEverything();
+      if (ab) {
+        this.props.dispatch (ab);
+      }
     }
   } 
 
@@ -44,7 +46,7 @@ export default class  extends React.Component {
 
     // using data- tags to clone props - like this, any regular html elements
     // will not complain if they receive a tag they dont like
-    const xcs = this.props.tutorial.everything.ready ? 
+    const xcs = this.props.tutorial.everything.ready || this.props.skipKeys ? 
       <span>
           {
             React.cloneElement(this.props.children, { 

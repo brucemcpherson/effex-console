@@ -138,6 +138,86 @@ export function atUpdateItem(pack) {
   return ecPattern (cs.actions.T_UPDATE_ITEM, pack, updateItem);
 
 }
+
+/**
+ * GOOD
+ * read a given item
+ * @param {object} options the options
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atWriteJsonItem(pack) {
+
+  const writeItem = (pack) => {
+   
+    return (pack.alias ? 
+      EC.writeAlias( pack.data,pack.alias,pack.key, pack.method, pack.params) :
+      EC.write( pack.data,pack.key, pack.method, pack.params))
+      .then(pr => {
+       
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+  };
+
+  return ecPattern (cs.actions.T_WRITE_JSON_ITEM, pack, writeItem);
+}   
+
+/**
+ * GOOD
+ * read a given item
+ * @param {object} options the options
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atRemoveJsonItem(pack) {
+
+  const readItem = (pack) => {
+
+    return EC.remove(pack.id, pack.key, pack.params)
+      .then(pr => {
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+  };
+
+  return ecPattern (cs.actions.T_REMOVE_JSON_ITEM, pack, readItem);
+} 
+
+/**
+ * GOOD
+ * read a given item
+ * @param {object} options the options
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atUpdateJsonItem(pack) {
+
+  const readItem = (pack) => {
+
+    return EC.update(pack.data , pack.id, pack.key, pack.params)
+      .then(pr => {
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+  };
+
+  return ecPattern (cs.actions.T_UPDATE_JSON_ITEM, pack, readItem);
+} 
+
+/**
+ * GOOD
+ * read a given item
+ * @param {object} options the options
+ * @return {null|object} and action object or null if one is already in flight with the same pageresult
+ */
+export function atReadJsonItem(pack) {
+
+  const readItem = (pack) => {
+
+    return EC.read(pack.id, pack.key, pack.params)
+      .then(pr => {
+        return {...pack,result:pr,success:pr.data && pr.data.ok};
+      });
+  };
+
+  return ecPattern (cs.actions.T_READ_JSON_ITEM, pack, readItem);
+} 
+    
 /**
  * GOOD
  * read a given item
@@ -271,6 +351,40 @@ export function atClearResult(pack) {
 
 }
 /**
+ * @param {object} pack the options
+ * @return {object} and action object
+ */
+export function atJsonKeys(pack) {
+
+  return {
+    type:cs.actions.T_AJSON_KEYS,
+    payload:pack
+  };
+
+}
+
+/**
+ * get someKeys
+ * @param {object} pack
+ * @return {object} an action object
+ */
+export function atGetSomeKeys (pack) {
+  const kt = ['updater','writer','reader'];
+  const makeKeys = () => {
+    return Promise.all(kt.map (d=>EC.generateKey(pack.boss, d)))
+    .then (pr=>{
+      // get the individual results to one place
+       return kt.reduce((p,c,i) => {
+        p.result[c] = {result:pr[i],success:pr[i].data && pr[i].data.ok};
+        return p;
+       }, {...pack, result:{}});
+    });
+  };
+  return ecPattern (cs.actions.T_GET_SOMEKEYS, pack, makeKeys);
+
+}
+
+/**
  * This is fairly complex because we're putting together
  * results from a number of async queries that depend on each other
  * and which return different shaped results
@@ -378,16 +492,6 @@ export function atMakeEverything() {
   };  
 
 
-/*
-       return ['item','shared','sharedUpdate','alias']
-       .reduce((p,c,i) => {
-        p[c] = {result:pr[i],success:pr[i].data && pr[i].data.ok};
-        return p;
-       }, {...pack});
-    })
-
-  };
-*/  
   // only do it if necessary to avoid multiple calling
   if (state.tutorial.everything.active || state.tutorial.everything.ready || state.tutorial.everything.error) return null;
   

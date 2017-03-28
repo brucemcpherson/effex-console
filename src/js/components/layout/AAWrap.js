@@ -30,6 +30,7 @@ export default class  extends React.Component {
    */
   componentDidMount(){
     this.props.dispatch (acMenuSelectedValue(Process.xRef[this.props.location.pathname]));
+
   } 
 
 
@@ -40,7 +41,8 @@ export default class  extends React.Component {
   render() {
 
     // no need to propagate everything to everything
-    const propOb = (this.props.propagate || ["dispatch","accounts","auth"]).reduce ((p,c) => {
+    const propOb = (this.props.propagate || ["dispatch","accounts","auth"])
+    .reduce ((p,c) => {
       p[c] = this.props[c];
       return p;
     },{});

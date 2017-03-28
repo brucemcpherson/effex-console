@@ -1,5 +1,5 @@
 import React from "react";
-import CopyToClipboard from 'react-copy-to-clipboard'
+import CopyToClipboard from 'react-copy-to-clipboard';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import {indigo500} from 'material-ui/styles/colors';
