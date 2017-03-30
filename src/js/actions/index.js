@@ -483,8 +483,9 @@ export function acAddBoss(pack) {
     
     const params = pack.params ? { ...pack.params} : {};
     params.apikey = getCurrentUid();
+   
     return EC.generateBoss(pack.accountId,pack.planId, params)
-    .then(pr => EC.getBosses(pack.accountId))
+    .then(pr => { if (!pr.data && pr.data.ok) console.log ('failed to create boss ',pr.data); return EC.getBosses(pack.accountId);})
     .then(pr => { return {...pack,result:pr,success:pr.data && pr.data.ok}});
 
   };

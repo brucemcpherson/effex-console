@@ -150,7 +150,7 @@ export default class extends React.Component {
           pageResults={"bosses"}
           multiSelectable={true}
           maxRows={cs.plans.a.MAX_BOSSES}
-          minRows={0}
+          minRows={1}
           title="Boss Keys"
           subtitle={selectedAccount ? `account ${selectedAccount}`:null}
           removeAction={acRemoveBoss}

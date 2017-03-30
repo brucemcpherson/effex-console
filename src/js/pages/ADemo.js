@@ -16,6 +16,17 @@ export default class extends React.Component {
             title={"Videos"}
             content={
               <span> 
+              
+                <XPaper>
+                <p>
+                  A demo of the Ephemeral exchange JSON editor and viewer
+                </p>
+                <YouTube 
+                  videoId="mNEK7n-huOE"
+                />
+                </XPaper>
+
+              
                 <XPaper>
                 <p>
                   This short video uses Ephemeral Exchange to allow Google Sheets, Docs and Microsoft Excel to share the same data with
@@ -25,6 +36,7 @@ export default class extends React.Component {
                   videoId="Lxh180oqRNc"
                 />
                 </XPaper>
+                
                 <XPaper>
                 <p>
                   This one builds on the map example and uses Ephemeral Exchange to allow Google Sheets, Docs and Slides to share the same data with
