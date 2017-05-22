@@ -11,10 +11,10 @@ const Process = (function(ns) {
     
     // populate store with initial values (there are none)
     ns.init = function () {
-
-      // set the base url for the api- these are defined in the constants file
-      EC.setBase(ca.apiBase.prod,ca.effexAdmin);
-      //EC.setBase(ca.apiBase.dev,ca.effexAdmin);
+      // change to prod/dev/alpha
+      EC.setEnv ("prod");
+      EC.setBase (null, ca.effexAdmin); 
+      
       // set up redux store
       ns.store = configureStore({});
 
